@@ -8,6 +8,8 @@ import com.zbar.kata.coffeemachine.usecases.SendCommand;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -25,66 +27,126 @@ public class SendCommandTest {
     @Nested
     class NoSugarWithoutStick {
 
-        @Test
-        public void shouldMakeCoffee() {
-            new SendCommand(maker).execute(DrinkType.COFFEE, 0.6);
-            verify(maker, times(1)).make("C::");
+        @Nested
+        class NoExtraHot {
+            @Test
+            public void shouldMakeCoffee() {
+                new SendCommand(maker).execute(DrinkType.COFFEE, 0.6, 0, false);
+                verify(maker, times(1)).make("C::");
+            }
+
+            @Test
+            public void shouldMakeChocolate() {
+                new SendCommand(maker).execute(DrinkType.CHOCOLATE, 0.5, 0, false);
+                verify(maker, times(1)).make("H::");
+            }
+
+            @Test
+            public void shouldMakeTea() {
+                new SendCommand(maker).execute(DrinkType.TEA, 0.4, 0, false);
+                verify(maker, times(1)).make("T::");
+            }
+
+            @Test
+            public void shouldMakeOrangeJuice() {
+                new SendCommand(maker).execute(DrinkType.ORANGE_JUICE, 0.6, 0, false);
+                verify(maker, times(1)).make("O::");
+            }
         }
 
-        @Test
-        public void shouldMakeChocolate() {
-            new SendCommand(maker).execute(DrinkType.CHOCOLATE, 0.5);
-            verify(maker, times(1)).make("H::");
-        }
+        @Nested
+        class ExtraHot {
+            @Test
+            public void shouldMakeCoffee() {
+                new SendCommand(maker).execute(DrinkType.COFFEE, 0.6, 0, true);
+                verify(maker, times(1)).make("Ch::");
+            }
 
-        @Test
-        public void shouldMakeTea() {
-            new SendCommand(maker).execute(DrinkType.TEA, 0.4);
-            verify(maker, times(1)).make("T::");
+            @Test
+            public void shouldMakeChocolate() {
+                new SendCommand(maker).execute(DrinkType.CHOCOLATE, 0.5, 0, true);
+                verify(maker, times(1)).make("Hh::");
+            }
+
+            @Test
+            public void shouldMakeTea() {
+                new SendCommand(maker).execute(DrinkType.TEA, 0.4, 0, true);
+                verify(maker, times(1)).make("Th::");
+            }
+
+            @Test
+            public void shouldMakeOrangeJuiceNoExtraHot() {
+                new SendCommand(maker).execute(DrinkType.ORANGE_JUICE, 0.6, 0, true);
+                verify(maker, times(1)).make("O::");
+            }
         }
     }
 
     @Nested
-    class OneSugarWithStick {
+    class SugarWithStick {
 
-        @Test
-        public void shouldMakeCoffee() {
-            new SendCommand(maker).execute(DrinkType.COFFEE, 0.6, 1);
-            verify(maker, times(1)).make("C:1:0");
+        @Nested
+        class NoExtraHot {
+
+            @ParameterizedTest
+            @ValueSource(ints = {1, 2})
+            public void shouldMakeCoffee(int numberOfSugars) {
+                new SendCommand(maker).execute(DrinkType.COFFEE, 0.6, numberOfSugars, false);
+                verify(maker, times(1)).make("C:" + numberOfSugars + ":0");
+            }
+
+            @ParameterizedTest
+            @ValueSource(ints = {1, 2})
+            public void shouldMakeChocolate(int numberOfSugars) {
+                new SendCommand(maker).execute(DrinkType.CHOCOLATE, 0.5, numberOfSugars, false);
+                verify(maker, times(1)).make("H:" + numberOfSugars + ":0");
+            }
+
+            @ParameterizedTest
+            @ValueSource(ints = {1, 2})
+            public void shouldMakeTea(int numberOfSugars) {
+                new SendCommand(maker).execute(DrinkType.TEA, 0.4, numberOfSugars, false);
+                verify(maker, times(1)).make("T:" + numberOfSugars + ":0");
+            }
+
+            @ParameterizedTest
+            @ValueSource(ints = {1, 2})
+            public void shouldMakeOrangeJuice(int numberOfSugars) {
+                new SendCommand(maker).execute(DrinkType.ORANGE_JUICE, 0.6, numberOfSugars, false);
+                verify(maker, times(1)).make("O:" + numberOfSugars + ":0");
+            }
         }
 
-        @Test
-        public void shouldMakeChocolate() {
-            new SendCommand(maker).execute(DrinkType.CHOCOLATE, 0.5, 1);
-            verify(maker, times(1)).make("H:1:0");
-        }
+        @Nested
+        class ExtraHot {
 
-        @Test
-        public void shouldMakeTea() {
-            new SendCommand(maker).execute(DrinkType.TEA, 0.4, 1);
-            verify(maker, times(1)).make("T:1:0");
-        }
-    }
+            @ParameterizedTest
+            @ValueSource(ints = {1, 2})
+            public void shouldMakeCoffee(int numberOfSugars) {
+                new SendCommand(maker).execute(DrinkType.COFFEE, 0.6, numberOfSugars, true);
+                verify(maker, times(1)).make("Ch:" + numberOfSugars + ":0");
+            }
 
-    @Nested
-    class TwoSugarAndStick {
+            @ParameterizedTest
+            @ValueSource(ints = {1, 2})
+            public void shouldMakeChocolate(int numberOfSugars) {
+                new SendCommand(maker).execute(DrinkType.CHOCOLATE, 0.5, numberOfSugars, true);
+                verify(maker, times(1)).make("Hh:" + numberOfSugars + ":0");
+            }
 
-        @Test
-        public void shouldMakeCoffee() {
-            new SendCommand(maker).execute(DrinkType.COFFEE, 0.6, 2);
-            verify(maker, times(1)).make("C:2:0");
-        }
+            @ParameterizedTest
+            @ValueSource(ints = {1, 2})
+            public void shouldMakeTea(int numberOfSugars) {
+                new SendCommand(maker).execute(DrinkType.TEA, 0.4, numberOfSugars, true);
+                verify(maker, times(1)).make("Th:" + numberOfSugars + ":0");
+            }
 
-        @Test
-        public void shouldMakeChocolate() {
-            new SendCommand(maker).execute(DrinkType.CHOCOLATE, 0.5, 2);
-            verify(maker, times(1)).make("H:2:0");
-        }
-
-        @Test
-        public void shouldMakeTea() {
-            new SendCommand(maker).execute(DrinkType.TEA, 0.4, 2);
-            verify(maker, times(1)).make("T:2:0");
+            @ParameterizedTest
+            @ValueSource(ints = {1, 2})
+            public void shouldMakeOrangeJuiceNoExtraHot(int numberOfSugars) {
+                new SendCommand(maker).execute(DrinkType.ORANGE_JUICE, 0.6, numberOfSugars, true);
+                verify(maker, times(1)).make("O:" + numberOfSugars + ":0");
+            }
         }
     }
 
@@ -94,21 +156,21 @@ public class SendCommandTest {
         @Test
         public void shouldNotMakeCoffee() {
             assertThatExceptionOfType(TooMuchSugarsException.class).isThrownBy(() ->
-                    new SendCommand(maker).execute(DrinkType.COFFEE, 0.6, 3));
+                    new SendCommand(maker).execute(DrinkType.COFFEE, 0.6, 3, false));
             verify(maker, times(0)).make(anyString());
         }
 
         @Test
         public void shouldNotMakeChocolate() {
             assertThatExceptionOfType(TooMuchSugarsException.class).isThrownBy(() ->
-                    new SendCommand(maker).execute(DrinkType.CHOCOLATE, 0.5, 3));
+                    new SendCommand(maker).execute(DrinkType.CHOCOLATE, 0.5, 3, false));
             verify(maker, times(0)).make(anyString());
         }
 
         @Test
         public void shouldNotMakeTea() {
             assertThatExceptionOfType(TooMuchSugarsException.class).isThrownBy(() ->
-                    new SendCommand(maker).execute(DrinkType.TEA, 0.4, 3));
+                    new SendCommand(maker).execute(DrinkType.TEA, 0.4, 3, false));
             verify(maker, times(0)).make(anyString());
         }
     }
@@ -119,21 +181,21 @@ public class SendCommandTest {
         @Test
         public void shouldNotMakeCoffee() {
             assertThatExceptionOfType(NotEnoughMoneyException.class).isThrownBy(() ->
-                    new SendCommand(maker).execute(DrinkType.COFFEE, 0.1));
+                    new SendCommand(maker).execute(DrinkType.COFFEE, 0.1, 0, false));
             verify(maker, times(1)).make("M:0,5€ missing");
         }
 
         @Test
         public void shouldNotMakeChocolate() {
             assertThatExceptionOfType(NotEnoughMoneyException.class).isThrownBy(() ->
-                    new SendCommand(maker).execute(DrinkType.CHOCOLATE, 0.1));
+                    new SendCommand(maker).execute(DrinkType.CHOCOLATE, 0.1, 0, false));
             verify(maker, times(1)).make("M:0,4€ missing");
         }
 
         @Test
         public void shouldNotMakeTea() {
             assertThatExceptionOfType(NotEnoughMoneyException.class).isThrownBy(() ->
-                    new SendCommand(maker).execute(DrinkType.TEA, 0.1));
+                    new SendCommand(maker).execute(DrinkType.TEA, 0.1, 0, false));
             verify(maker, times(1)).make("M:0,3€ missing");
         }
     }

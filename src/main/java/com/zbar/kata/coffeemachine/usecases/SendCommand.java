@@ -17,15 +17,10 @@ public class SendCommand {
         this.maker = maker;
     }
 
-    public void execute(DrinkType type, double money) {
-        checkIfEnoughMoney(type, money);
-        stringifyAndSendCommand(type, 0);
-    }
-
-    public void execute(DrinkType type, double money, int numberOfSugars) {
+    public void execute(DrinkType type, double money, int numberOfSugars, boolean extraHot) {
         checkIfEnoughMoney(type, money);
         checkIfTooMuchSugarsAsked(numberOfSugars);
-        stringifyAndSendCommand(type, numberOfSugars);
+        stringifyAndSendCommand(type, numberOfSugars, extraHot);
     }
 
     private void checkIfEnoughMoney(DrinkType type, double money) {
@@ -46,14 +41,14 @@ public class SendCommand {
         return numberOfSugars > 2;
     }
 
-    private void stringifyAndSendCommand(DrinkType type, int numberOfSugars) {
-        var stringify = stringifyCommand(type, numberOfSugars);
+    private void stringifyAndSendCommand(DrinkType type, int numberOfSugars, boolean extraHot) {
+        var stringify = stringifyCommand(type, numberOfSugars, extraHot);
         this.maker.make(stringify);
     }
 
-    private String stringifyCommand(DrinkType type, int numberOfSugars) {
+    private String stringifyCommand(DrinkType type, int numberOfSugars, boolean extraHot) {
         var joiner = new StringJoiner(":");
-        joiner.add(type.getCode());
+        joiner.add(composeTypeCode(type, extraHot));
         if (hasSugars(numberOfSugars)) {
             joiner.add(Integer.toString(numberOfSugars));
             joiner.add("0");
@@ -61,6 +56,13 @@ public class SendCommand {
             joiner.add(":");
         }
         return joiner.toString();
+    }
+
+    private String composeTypeCode(DrinkType type, boolean extraHot) {
+        if (DrinkType.ORANGE_JUICE.equals(type)) {
+            return type.getCode();
+        }
+        return extraHot ? type.getCode() + "h" : type.getCode();
     }
 
     private boolean hasSugars(int numberOfSugars) {
