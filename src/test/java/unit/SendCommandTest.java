@@ -173,6 +173,13 @@ public class SendCommandTest {
                     new SendCommand(maker).execute(DrinkType.TEA, 0.4, 3, false));
             verify(maker, times(0)).make(anyString());
         }
+
+        @Test
+        public void shouldNotMakeOrangeJuice() {
+            assertThatExceptionOfType(TooMuchSugarsException.class).isThrownBy(() ->
+                    new SendCommand(maker).execute(DrinkType.ORANGE_JUICE, 0.6, 3, false));
+            verify(maker, times(0)).make(anyString());
+        }
     }
 
     @Nested
@@ -197,6 +204,13 @@ public class SendCommandTest {
             assertThatExceptionOfType(NotEnoughMoneyException.class).isThrownBy(() ->
                     new SendCommand(maker).execute(DrinkType.TEA, 0.1, 0, false));
             verify(maker, times(1)).make("M:0,3€ missing");
+        }
+
+        @Test
+        public void shouldNotMakeOrangeJuice() {
+            assertThatExceptionOfType(NotEnoughMoneyException.class).isThrownBy(() ->
+                    new SendCommand(maker).execute(DrinkType.ORANGE_JUICE, 0.1, 0, false));
+            verify(maker, times(1)).make("M:0,5€ missing");
         }
     }
 }
