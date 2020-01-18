@@ -4,6 +4,7 @@ import com.zbar.kata.coffeemachine.entities.DrinkType;
 import com.zbar.kata.coffeemachine.entities.NotEnoughMoneyException;
 import com.zbar.kata.coffeemachine.entities.TooMuchSugarsException;
 import com.zbar.kata.coffeemachine.ports.DrinkMakerPort;
+import com.zbar.kata.coffeemachine.ports.ReportRepository;
 
 import java.text.DecimalFormat;
 import java.util.StringJoiner;
@@ -11,15 +12,18 @@ import java.util.StringJoiner;
 public class SendCommand {
 
     private final DrinkMakerPort maker;
+    private final ReportRepository repository;
     private static DecimalFormat df = new DecimalFormat("#.##");
 
-    public SendCommand(DrinkMakerPort maker) {
+    public SendCommand(DrinkMakerPort maker, ReportRepository repository) {
         this.maker = maker;
+        this.repository = repository;
     }
 
     public void execute(DrinkType type, double money, int numberOfSugars, boolean extraHot) {
         checkIfEnoughMoney(type, money);
         checkIfTooMuchSugarsAsked(numberOfSugars);
+        repository.add(type);
         stringifyAndSendCommand(type, numberOfSugars, extraHot);
     }
 
