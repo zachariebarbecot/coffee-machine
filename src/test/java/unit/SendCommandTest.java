@@ -257,6 +257,8 @@ public class SendCommandTest {
     @Nested
     class NoBeverage {
 
+        private static final String RUNNING_OUT = "M:Running out of ";
+
         @BeforeEach
         public void init() {
             when(checker.isEmpty(anyString())).thenReturn(true);
@@ -266,28 +268,28 @@ public class SendCommandTest {
         public void shouldNotMakeCoffee() {
             assertThatExceptionOfType(RunningOutException.class).isThrownBy(() ->
                     sendCommand(DrinkType.COFFEE, 0.6, 0, false));
-            verifyNestedCommand(DrinkType.COFFEE, "M:Running out of " + DrinkType.COFFEE.getCode());
+            verifyNestedCommand(DrinkType.COFFEE, RUNNING_OUT + DrinkType.COFFEE.getCode());
         }
 
         @Test
         public void shouldNotMakeChocolate() {
             assertThatExceptionOfType(RunningOutException.class).isThrownBy(() ->
                     sendCommand(DrinkType.CHOCOLATE, 0.5, 0, false));
-            verifyNestedCommand(DrinkType.CHOCOLATE, "M:Running out of " + DrinkType.CHOCOLATE.getCode());
+            verifyNestedCommand(DrinkType.CHOCOLATE, RUNNING_OUT + DrinkType.CHOCOLATE.getCode());
         }
 
         @Test
         public void shouldNotMakeTea() {
             assertThatExceptionOfType(RunningOutException.class).isThrownBy(() ->
                     sendCommand(DrinkType.TEA, 0.4, 0, false));
-            verifyNestedCommand(DrinkType.TEA, "M:Running out of " + DrinkType.TEA.getCode());
+            verifyNestedCommand(DrinkType.TEA, RUNNING_OUT + DrinkType.TEA.getCode());
         }
 
         @Test
         public void shouldNotMakeOrangeJuice() {
             assertThatExceptionOfType(RunningOutException.class).isThrownBy(() ->
                     sendCommand(DrinkType.ORANGE_JUICE, 0.6, 0, false));
-            verifyNestedCommand(DrinkType.ORANGE_JUICE, "M:Running out of " + DrinkType.ORANGE_JUICE.getCode());
+            verifyNestedCommand(DrinkType.ORANGE_JUICE, RUNNING_OUT + DrinkType.ORANGE_JUICE.getCode());
         }
 
         private void verifyNestedCommand(DrinkType type, String stringifyMessage) {

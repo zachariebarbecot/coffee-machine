@@ -25,7 +25,7 @@ public class InMemoryReportRepository implements ReportRepository {
     @Override
     public double sumAll() {
         return this.commands.stream()
-                .mapToDouble(type -> type.getPrice())
+                .mapToDouble(DrinkType::getPrice)
                 .sum();
     }
 }

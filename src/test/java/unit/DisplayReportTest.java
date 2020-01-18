@@ -55,7 +55,7 @@ class DisplayReportTest {
 
     private void given(DrinkType... types) {
         Arrays.stream(types)
-                .forEach(type -> repository.add(type));
+                .forEach(repository::add);
     }
 
     private void verifyReport(long numberOfCoffees, long numberOfChocolates, long numberOfTeas, long numberOfOrangeJuices, String sum) {
