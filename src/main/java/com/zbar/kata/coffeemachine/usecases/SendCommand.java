@@ -14,11 +14,11 @@ import java.util.StringJoiner;
 
 public class SendCommand {
 
+    private static final DecimalFormat df = new DecimalFormat("#.##");
     private final DrinkMakerPort maker;
     private final ReportRepository repository;
     private final BeverageQuantityCheckerPort checker;
     private final EmailNotifierPort notifier;
-    private static DecimalFormat df = new DecimalFormat("#.##");
 
     public SendCommand(DrinkMakerPort maker, ReportRepository repository, BeverageQuantityCheckerPort checker, EmailNotifierPort notifier) {
         this.maker = maker;
@@ -36,11 +36,15 @@ public class SendCommand {
     }
 
     private void checkIfEnoughMoney(DrinkType type, double money) {
-        if (type.getPrice() > money) {
+        if (hasNoEnoughMoney(type, money)) {
             var stringify = stringifyMessage(df.format(type.getPrice() - money) + "€ missing");
             this.maker.make(stringify);
             throw new NotEnoughMoneyException();
         }
+    }
+
+    private boolean hasNoEnoughMoney(DrinkType type, double money) {
+        return type.getPrice() > money;
     }
 
     private void checkIfTooMuchSugarsAsked(int numberOfSugars) {

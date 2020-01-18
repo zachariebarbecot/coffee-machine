@@ -47,33 +47,25 @@ public class SendCommandTest {
             @Test
             public void shouldMakeCoffee() {
                 sendCommand(DrinkType.COFFEE, 0.6, 0, false);
-                verify(notifier, times(0)).notifyMissingDrink(anyString());
-                verify(repository, times(1)).add(DrinkType.COFFEE);
-                verify(maker, times(1)).make("C::");
+                verifyNestedCommand(DrinkType.COFFEE, "C");
             }
 
             @Test
             public void shouldMakeChocolate() {
                 sendCommand(DrinkType.CHOCOLATE, 0.5, 0, false);
-                verify(notifier, times(0)).notifyMissingDrink(anyString());
-                verify(repository, times(1)).add(DrinkType.CHOCOLATE);
-                verify(maker, times(1)).make("H::");
+                verifyNestedCommand(DrinkType.CHOCOLATE, "H");
             }
 
             @Test
             public void shouldMakeTea() {
                 sendCommand(DrinkType.TEA, 0.4, 0, false);
-                verify(notifier, times(0)).notifyMissingDrink(anyString());
-                verify(repository, times(1)).add(DrinkType.TEA);
-                verify(maker, times(1)).make("T::");
+                verifyNestedCommand(DrinkType.TEA, "T");
             }
 
             @Test
             public void shouldMakeOrangeJuice() {
                 sendCommand(DrinkType.ORANGE_JUICE, 0.6, 0, false);
-                verify(notifier, times(0)).notifyMissingDrink(anyString());
-                verify(repository, times(1)).add(DrinkType.ORANGE_JUICE);
-                verify(maker, times(1)).make("O::");
+                verifyNestedCommand(DrinkType.ORANGE_JUICE, "O");
             }
         }
 
@@ -82,34 +74,30 @@ public class SendCommandTest {
             @Test
             public void shouldMakeCoffee() {
                 sendCommand(DrinkType.COFFEE, 0.6, 0, true);
-                verify(notifier, times(0)).notifyMissingDrink(anyString());
-                verify(repository, times(1)).add(DrinkType.COFFEE);
-                verify(maker, times(1)).make("Ch::");
+                verifyNestedCommand(DrinkType.COFFEE, "Ch");
             }
 
             @Test
             public void shouldMakeChocolate() {
                 sendCommand(DrinkType.CHOCOLATE, 0.5, 0, true);
-                verify(notifier, times(0)).notifyMissingDrink(anyString());
-                verify(repository, times(1)).add(DrinkType.CHOCOLATE);
-                verify(maker, times(1)).make("Hh::");
+                verifyNestedCommand(DrinkType.CHOCOLATE, "Hh");
             }
 
             @Test
             public void shouldMakeTea() {
                 sendCommand(DrinkType.TEA, 0.4, 0, true);
-                verify(notifier, times(0)).notifyMissingDrink(anyString());
-                verify(repository, times(1)).add(DrinkType.TEA);
-                verify(maker, times(1)).make("Th::");
+                verifyNestedCommand(DrinkType.TEA, "Th");
             }
 
             @Test
             public void shouldMakeOrangeJuiceNoExtraHot() {
                 sendCommand(DrinkType.ORANGE_JUICE, 0.6, 0, true);
-                verify(notifier, times(0)).notifyMissingDrink(anyString());
-                verify(repository, times(1)).add(DrinkType.ORANGE_JUICE);
-                verify(maker, times(1)).make("O::");
+                verifyNestedCommand(DrinkType.ORANGE_JUICE, "O");
             }
+        }
+
+        private void verifyNestedCommand(DrinkType type, String stringifyType) {
+            verifyCommand(type, stringifyType + "::");
         }
     }
 
@@ -128,36 +116,28 @@ public class SendCommandTest {
             @ValueSource(ints = {1, 2})
             public void shouldMakeCoffee(int numberOfSugars) {
                 sendCommand(DrinkType.COFFEE, 0.6, numberOfSugars, false);
-                verify(notifier, times(0)).notifyMissingDrink(anyString());
-                verify(repository, times(1)).add(DrinkType.COFFEE);
-                verify(maker, times(1)).make("C:" + numberOfSugars + ":0");
+                verifyNestedCommand(DrinkType.COFFEE, "C", numberOfSugars);
             }
 
             @ParameterizedTest
             @ValueSource(ints = {1, 2})
             public void shouldMakeChocolate(int numberOfSugars) {
                 sendCommand(DrinkType.CHOCOLATE, 0.5, numberOfSugars, false);
-                verify(notifier, times(0)).notifyMissingDrink(anyString());
-                verify(repository, times(1)).add(DrinkType.CHOCOLATE);
-                verify(maker, times(1)).make("H:" + numberOfSugars + ":0");
+                verifyNestedCommand(DrinkType.CHOCOLATE, "H", numberOfSugars);
             }
 
             @ParameterizedTest
             @ValueSource(ints = {1, 2})
             public void shouldMakeTea(int numberOfSugars) {
                 sendCommand(DrinkType.TEA, 0.4, numberOfSugars, false);
-                verify(notifier, times(0)).notifyMissingDrink(anyString());
-                verify(repository, times(1)).add(DrinkType.TEA);
-                verify(maker, times(1)).make("T:" + numberOfSugars + ":0");
+                verifyNestedCommand(DrinkType.TEA, "T", numberOfSugars);
             }
 
             @ParameterizedTest
             @ValueSource(ints = {1, 2})
             public void shouldMakeOrangeJuice(int numberOfSugars) {
                 sendCommand(DrinkType.ORANGE_JUICE, 0.6, numberOfSugars, false);
-                verify(notifier, times(0)).notifyMissingDrink(anyString());
-                verify(repository, times(1)).add(DrinkType.ORANGE_JUICE);
-                verify(maker, times(1)).make("O:" + numberOfSugars + ":0");
+                verifyNestedCommand(DrinkType.ORANGE_JUICE, "O", numberOfSugars);
             }
         }
 
@@ -168,37 +148,33 @@ public class SendCommandTest {
             @ValueSource(ints = {1, 2})
             public void shouldMakeCoffee(int numberOfSugars) {
                 sendCommand(DrinkType.COFFEE, 0.6, numberOfSugars, true);
-                verify(notifier, times(0)).notifyMissingDrink(anyString());
-                verify(repository, times(1)).add(DrinkType.COFFEE);
-                verify(maker, times(1)).make("Ch:" + numberOfSugars + ":0");
+                verifyNestedCommand(DrinkType.COFFEE, "Ch", numberOfSugars);
             }
 
             @ParameterizedTest
             @ValueSource(ints = {1, 2})
             public void shouldMakeChocolate(int numberOfSugars) {
                 sendCommand(DrinkType.CHOCOLATE, 0.5, numberOfSugars, true);
-                verify(notifier, times(0)).notifyMissingDrink(anyString());
-                verify(repository, times(1)).add(DrinkType.CHOCOLATE);
-                verify(maker, times(1)).make("Hh:" + numberOfSugars + ":0");
+                verifyNestedCommand(DrinkType.CHOCOLATE, "Hh", numberOfSugars);
             }
 
             @ParameterizedTest
             @ValueSource(ints = {1, 2})
             public void shouldMakeTea(int numberOfSugars) {
                 sendCommand(DrinkType.TEA, 0.4, numberOfSugars, true);
-                verify(notifier, times(0)).notifyMissingDrink(anyString());
-                verify(repository, times(1)).add(DrinkType.TEA);
-                verify(maker, times(1)).make("Th:" + numberOfSugars + ":0");
+                verifyNestedCommand(DrinkType.TEA, "Th", numberOfSugars);
             }
 
             @ParameterizedTest
             @ValueSource(ints = {1, 2})
             public void shouldMakeOrangeJuiceNoExtraHot(int numberOfSugars) {
                 sendCommand(DrinkType.ORANGE_JUICE, 0.6, numberOfSugars, true);
-                verify(notifier, times(0)).notifyMissingDrink(anyString());
-                verify(repository, times(1)).add(DrinkType.ORANGE_JUICE);
-                verify(maker, times(1)).make("O:" + numberOfSugars + ":0");
+                verifyNestedCommand(DrinkType.ORANGE_JUICE, "O", numberOfSugars);
             }
+        }
+
+        private void verifyNestedCommand(DrinkType type, String stringifyType, int numberOfSugars) {
+            verifyCommand(type, stringifyType + ":" + numberOfSugars + ":0");
         }
     }
 
@@ -209,35 +185,33 @@ public class SendCommandTest {
         public void shouldNotMakeCoffee() {
             assertThatExceptionOfType(TooMuchSugarsException.class).isThrownBy(() ->
                     sendCommand(DrinkType.COFFEE, 0.6, 3, false));
-            verify(notifier, times(0)).notifyMissingDrink(anyString());
-            verify(repository, times(0)).add(DrinkType.COFFEE);
-            verify(maker, times(0)).make(anyString());
+            verifyNestedCommand(DrinkType.COFFEE);
         }
 
         @Test
         public void shouldNotMakeChocolate() {
             assertThatExceptionOfType(TooMuchSugarsException.class).isThrownBy(() ->
                     sendCommand(DrinkType.CHOCOLATE, 0.5, 3, false));
-            verify(notifier, times(0)).notifyMissingDrink(anyString());
-            verify(repository, times(0)).add(DrinkType.CHOCOLATE);
-            verify(maker, times(0)).make(anyString());
+            verifyNestedCommand(DrinkType.CHOCOLATE);
         }
 
         @Test
         public void shouldNotMakeTea() {
             assertThatExceptionOfType(TooMuchSugarsException.class).isThrownBy(() ->
                     sendCommand(DrinkType.TEA, 0.4, 3, false));
-            verify(notifier, times(0)).notifyMissingDrink(anyString());
-            verify(repository, times(0)).add(DrinkType.TEA);
-            verify(maker, times(0)).make(anyString());
+            verifyNestedCommand(DrinkType.TEA);
         }
 
         @Test
         public void shouldNotMakeOrangeJuice() {
             assertThatExceptionOfType(TooMuchSugarsException.class).isThrownBy(() ->
                     sendCommand(DrinkType.ORANGE_JUICE, 0.6, 3, false));
+            verifyNestedCommand(DrinkType.ORANGE_JUICE);
+        }
+
+        private void verifyNestedCommand(DrinkType type) {
             verify(notifier, times(0)).notifyMissingDrink(anyString());
-            verify(repository, times(0)).add(DrinkType.ORANGE_JUICE);
+            verify(repository, times(0)).add(type);
             verify(maker, times(0)).make(anyString());
         }
     }
@@ -249,36 +223,34 @@ public class SendCommandTest {
         public void shouldNotMakeCoffee() {
             assertThatExceptionOfType(NotEnoughMoneyException.class).isThrownBy(() ->
                     sendCommand(DrinkType.COFFEE, 0.1, 0, false));
-            verify(notifier, times(0)).notifyMissingDrink(anyString());
-            verify(repository, times(0)).add(DrinkType.COFFEE);
-            verify(maker, times(1)).make("M:0,5€ missing");
+            verifyNestedCommand(DrinkType.COFFEE, "M:0,5€ missing");
         }
 
         @Test
         public void shouldNotMakeChocolate() {
             assertThatExceptionOfType(NotEnoughMoneyException.class).isThrownBy(() ->
                     sendCommand(DrinkType.CHOCOLATE, 0.1, 0, false));
-            verify(notifier, times(0)).notifyMissingDrink(anyString());
-            verify(repository, times(0)).add(DrinkType.CHOCOLATE);
-            verify(maker, times(1)).make("M:0,4€ missing");
+            verifyNestedCommand(DrinkType.CHOCOLATE, "M:0,4€ missing");
         }
 
         @Test
         public void shouldNotMakeTea() {
             assertThatExceptionOfType(NotEnoughMoneyException.class).isThrownBy(() ->
                     sendCommand(DrinkType.TEA, 0.1, 0, false));
-            verify(notifier, times(0)).notifyMissingDrink(anyString());
-            verify(repository, times(0)).add(DrinkType.TEA);
-            verify(maker, times(1)).make("M:0,3€ missing");
+            verifyNestedCommand(DrinkType.TEA, "M:0,3€ missing");
         }
 
         @Test
         public void shouldNotMakeOrangeJuice() {
             assertThatExceptionOfType(NotEnoughMoneyException.class).isThrownBy(() ->
                     sendCommand(DrinkType.ORANGE_JUICE, 0.1, 0, false));
+            verifyNestedCommand(DrinkType.ORANGE_JUICE, "M:0,5€ missing");
+        }
+
+        private void verifyNestedCommand(DrinkType type, String stringifyMessage) {
             verify(notifier, times(0)).notifyMissingDrink(anyString());
-            verify(repository, times(0)).add(DrinkType.ORANGE_JUICE);
-            verify(maker, times(1)).make("M:0,5€ missing");
+            verify(repository, times(0)).add(type);
+            verify(maker, times(1)).make(stringifyMessage);
         }
     }
 
@@ -294,40 +266,44 @@ public class SendCommandTest {
         public void shouldNotMakeCoffee() {
             assertThatExceptionOfType(RunningOutException.class).isThrownBy(() ->
                     sendCommand(DrinkType.COFFEE, 0.6, 0, false));
-            verify(notifier, times(1)).notifyMissingDrink(DrinkType.COFFEE.getCode());
-            verify(repository, times(0)).add(DrinkType.COFFEE);
-            verify(maker, times(1)).make("M:Running out of " + DrinkType.COFFEE.getCode());
+            verifyNestedCommand(DrinkType.COFFEE, "M:Running out of " + DrinkType.COFFEE.getCode());
         }
 
         @Test
         public void shouldNotMakeChocolate() {
             assertThatExceptionOfType(RunningOutException.class).isThrownBy(() ->
                     sendCommand(DrinkType.CHOCOLATE, 0.5, 0, false));
-            verify(notifier, times(1)).notifyMissingDrink(DrinkType.CHOCOLATE.getCode());
-            verify(repository, times(0)).add(DrinkType.CHOCOLATE);
-            verify(maker, times(1)).make("M:Running out of " + DrinkType.CHOCOLATE.getCode());
+            verifyNestedCommand(DrinkType.CHOCOLATE, "M:Running out of " + DrinkType.CHOCOLATE.getCode());
         }
 
         @Test
         public void shouldNotMakeTea() {
             assertThatExceptionOfType(RunningOutException.class).isThrownBy(() ->
                     sendCommand(DrinkType.TEA, 0.4, 0, false));
-            verify(notifier, times(1)).notifyMissingDrink(DrinkType.TEA.getCode());
-            verify(repository, times(0)).add(DrinkType.TEA);
-            verify(maker, times(1)).make("M:Running out of " + DrinkType.TEA.getCode());
+            verifyNestedCommand(DrinkType.TEA, "M:Running out of " + DrinkType.TEA.getCode());
         }
 
         @Test
         public void shouldNotMakeOrangeJuice() {
             assertThatExceptionOfType(RunningOutException.class).isThrownBy(() ->
                     sendCommand(DrinkType.ORANGE_JUICE, 0.6, 0, false));
-            verify(notifier, times(1)).notifyMissingDrink(DrinkType.ORANGE_JUICE.getCode());
-            verify(repository, times(0)).add(DrinkType.ORANGE_JUICE);
-            verify(maker, times(1)).make("M:Running out of " + DrinkType.ORANGE_JUICE.getCode());
+            verifyNestedCommand(DrinkType.ORANGE_JUICE, "M:Running out of " + DrinkType.ORANGE_JUICE.getCode());
+        }
+
+        private void verifyNestedCommand(DrinkType type, String stringifyMessage) {
+            verify(notifier, times(1)).notifyMissingDrink(type.getCode());
+            verify(repository, times(0)).add(type);
+            verify(maker, times(1)).make(stringifyMessage);
         }
     }
 
     private void sendCommand(DrinkType type, double money, int numberOfSugars, boolean extraHot) {
         new SendCommand(maker, repository, checker, notifier).execute(type, money, numberOfSugars, extraHot);
+    }
+
+    private void verifyCommand(DrinkType type, String stringifyCommand) {
+        verify(notifier, times(0)).notifyMissingDrink(anyString());
+        verify(repository, times(1)).add(type);
+        verify(maker, times(1)).make(stringifyCommand);
     }
 }
