@@ -6,7 +6,7 @@
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <properties>
-        <assertj.version>3.14.0</assertj.version>
+        <assertj.version>3.27.7</assertj.version>
         <java.version>13</java.version>
         <junit-jupiter.version>5.5.2</junit-jupiter.version>
         <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
